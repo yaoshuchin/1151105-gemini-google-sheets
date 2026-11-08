@@ -657,9 +657,204 @@
       nav.nav-links { display: none; }
       .unit-card { padding: 20px; }
     }
+
+    /* ==========================================================================
+       PASSWORD ACCESS GATE
+       ========================================================================== */
+    .password-gate-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: radial-gradient(circle at top right, #1e1b4b, #0f172a 70%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      backdrop-filter: blur(16px);
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+    .password-gate-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .gate-card {
+      width: 100%;
+      max-width: 460px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: var(--radius-lg);
+      padding: 38px 30px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(20px);
+      color: #ffffff;
+      text-align: center;
+      animation: gateFloatIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes gateFloatIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.96);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    .gate-icon-badge {
+      width: 68px;
+      height: 68px;
+      margin: 0 auto 18px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.5);
+    }
+    .gate-title {
+      font-size: 1.45rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      background: linear-gradient(to right, #ffffff, #cbd5e1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .gate-subtitle {
+      font-size: 0.9rem;
+      color: #94a3b8;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+    .gate-form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .gate-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .gate-input {
+      width: 100%;
+      padding: 14px 44px 14px 16px;
+      font-size: 1rem;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: var(--radius-md);
+      color: #ffffff;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .gate-input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.35);
+    }
+    .gate-toggle-pw {
+      position: absolute;
+      right: 12px;
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 1.1rem;
+      padding: 4px;
+    }
+    .gate-btn-submit {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #ffffff;
+      background: linear-gradient(135deg, #1a73e8, #8e24aa);
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      box-shadow: 0 10px 20px -5px rgba(26, 115, 232, 0.5);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .gate-btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 25px -5px rgba(26, 115, 232, 0.6);
+    }
+    .gate-error-msg {
+      color: #f87171;
+      font-size: 0.88rem;
+      font-weight: 600;
+      min-height: 20px;
+    }
+    .gate-shake {
+      animation: gateShake 0.4s ease-in-out;
+    }
+    @keyframes gateShake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+    .gate-hint {
+      margin-top: 18px;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.05);
+      font-size: 0.82rem;
+      color: #cbd5e1;
+    }
+    .btn-lock {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 12px;
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-left: 10px;
+    }
+    .btn-lock:hover {
+      background: #fee2e2;
+      color: #b91c1c;
+      border-color: #fca5a5;
+    }
   </style>
 </head>
 <body>
+
+  <!-- =====================================================================
+       PASSWORD ACCESS GATE
+       ===================================================================== -->
+  <div id="passwordGate" class="password-gate-overlay">
+    <div class="gate-card">
+      <div class="gate-icon-badge">🔐</div>
+      <h2 class="gate-title">學員研習專屬認證通道</h2>
+      <p class="gate-subtitle">
+        歡迎蒞臨【Google 試算表 ✕ Gemini】研習實戰教學講義。<br>
+        請輸入研習存取通行碼以解鎖完整課程教材與實作範本。
+      </p>
+      <form id="gateForm" class="gate-form">
+        <div class="gate-input-wrapper">
+          <input type="password" id="gateInput" class="gate-input" placeholder="請輸入專屬研習通行碼" autocomplete="current-password" required>
+          <button type="button" id="togglePw" class="gate-toggle-pw" title="顯示/隱藏密碼">👁️</button>
+        </div>
+        <button type="submit" class="gate-btn-submit">
+          <span>✨</span>
+          <span>立即解鎖進入學習網</span>
+        </button>
+        <div id="gateError" class="gate-error-msg"></div>
+      </form>
+      <div class="gate-hint">
+        💡 請輸入研習專屬通行碼（驗證後可長久保留登入狀態）
+      </div>
+    </div>
+  </div>
 
   <!-- Site Header -->
   <header class="site-header">
@@ -675,6 +870,7 @@
         <a href="#slides">簡報展示</a>
         <a href="#checklist">實作檢核</a>
         <a href="#faq">FAQ</a>
+        <button id="btnLock" class="btn-lock" title="重新鎖定系統">🔒 鎖定</button>
       </nav>
     </div>
   </header>
@@ -1196,6 +1392,78 @@
   </div>
 
   <script>
+    // Authentication Gate Logic
+    const APP_PASS = 'nato';
+    const AUTH_KEY = 'gemini_sheets_workshop_auth_1151105';
+
+    const gateOverlay = document.getElementById('passwordGate');
+    const gateInput = document.getElementById('gateInput');
+    const gateForm = document.getElementById('gateForm');
+    const gateError = document.getElementById('gateError');
+    const btnTogglePw = document.getElementById('togglePw');
+    const btnLock = document.getElementById('btnLock');
+
+    const checkAuth = () => {
+      const isAuth = localStorage.getItem(AUTH_KEY);
+      if (isAuth === 'true') {
+        gateOverlay.classList.add('hidden');
+      } else {
+        gateOverlay.classList.remove('hidden');
+        setTimeout(() => gateInput && gateInput.focus(), 200);
+      }
+    };
+
+    const unlock = () => {
+      const entered = (gateInput.value || '').trim();
+      if (entered.toLowerCase() === APP_PASS) {
+        localStorage.setItem(AUTH_KEY, 'true');
+        gateError.textContent = '';
+        gateOverlay.classList.add('hidden');
+        showToast('✨ 通行碼驗證成功！歡迎進入研習講義');
+      } else {
+        gateError.textContent = '通行碼錯誤，請確認後重新輸入';
+        const card = document.querySelector('.gate-card');
+        if (card) {
+          card.classList.remove('gate-shake');
+          void card.offsetWidth; // trigger reflow
+          card.classList.add('gate-shake');
+        }
+        gateInput.select();
+      }
+    };
+
+    if (gateForm) {
+      gateForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        unlock();
+      });
+    }
+
+    if (btnTogglePw) {
+      btnTogglePw.addEventListener('click', () => {
+        if (gateInput.type === 'password') {
+          gateInput.type = 'text';
+          btnTogglePw.textContent = '🙈';
+        } else {
+          gateInput.type = 'password';
+          btnTogglePw.textContent = '👁️';
+        }
+      });
+    }
+
+    if (btnLock) {
+      btnLock.addEventListener('click', () => {
+        localStorage.removeItem(AUTH_KEY);
+        gateInput.value = '';
+        gateError.textContent = '';
+        gateOverlay.classList.remove('hidden');
+        gateInput.focus();
+        showToast('🔒 已鎖定系統');
+      });
+    }
+
+    checkAuth();
+
     // Copy Prompt Function
     function copyPrompt(btn) {
       const block = btn.closest('.prompt-block');
